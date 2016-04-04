@@ -22,6 +22,20 @@ $(document).ready(function() {
     success: assembleAlbums
   });
 
+  $('#album-form').on('submit', function(event){
+    event.preventDefault();
+    console.log('clicked submit: ',$(this).serialize());
+    $.ajax({
+      method: 'POST',
+      url: '/api/albums',
+      data: $(this).serialize(),
+      success: assembleAlbums
+
+    });
+
+  });
+
+
 }); //end document ready
 
 function assembleAlbums(json){
