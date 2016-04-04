@@ -24,13 +24,12 @@ $(document).ready(function() {
 
   $('#album-form').on('submit', function(event){
     event.preventDefault();
-    console.log('clicked submit: ',$(this).serialize());
+    console.log('clicked submit: ', $(this).serialize());
     $.ajax({
       method: 'POST',
       url: '/api/albums',
       data: $(this).serialize(),
-      success: assembleAlbums
-
+      success: prependNewAlbum
     });
 
   });
@@ -42,9 +41,13 @@ function assembleAlbums(json){
   albums = json;
   console.log('recieved: ', albums);
   albums.forEach(function(album){
-    var albumHtml = template(album);
-    console.log('rendering album:', album);
-    // this function takes a single album and renders it to the page
-    $('#albums').prepend(albumHtml);
+    prependNewAlbum(album);
   });
+}
+
+// this function takes a single album and renders it to the page
+function prependNewAlbum(album){
+  var albumHtml = template(album);
+  console.log('rendering album:', album);
+  $('#albums').prepend(albumHtml);
 }

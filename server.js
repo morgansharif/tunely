@@ -6,8 +6,14 @@ var express = require('express');
 var app = express(),
     db = require('./models');
 
+// require body-parser
+var bodyParser = require('body-parser');
+
 // serve static files from public folder
 app.use(express.static(__dirname + '/public'));
+
+//body parser config
+app.use(bodyParser.urlencoded({extended: true}));
 
 // We'll serve jQuery and bootstrap from a local bower cache avoiding CDNs
 // We're placing these under /vendor to differentiate them from our own assets
@@ -35,12 +41,24 @@ app.get('/', function homepage (req, res) {
 
 app.get('/api', controllers.api.index);
 
+//get all albums
 app.get('/api/albums', function(req, res){
   console.log("GET '/api/albums' TRIGGERED");
-  db.Album.find(function (err, album){
+  db.Album.find(function (err, albums){
     if (err){console.log('--error: ', err);}
-    console.log('--res:',album);
-    res.json(album);
+    console.log('--res:',albums);
+    res.json(albums);
+  });
+});
+
+app.post('/api/albums', function(req, res){
+  console.log("POST '/api/albums' TRIGGERED");
+  console.log('--req:', req.body);
+  var newAlbum = new db.Album(req.body);
+  newAlbum.save(function(err, album){
+  if (err) {return console.log("save error: " + err);}
+  console.log('--res:',album);
+  res.json(album);
   });
 });
 
