@@ -3,7 +3,8 @@
 //require express in our app
 var express = require('express');
 // generate a new express app and call it 'app'
-var app = express();
+var app = express(),
+    db = require('./models');
 
 // serve static files from public folder
 app.use(express.static(__dirname + '/public'));
@@ -14,33 +15,6 @@ app.use('/vendor', express.static(__dirname + '/bower_components'));
 
 var controllers = require('./controllers');
 
-///////////////HARD CODED SEED DATA/////////////////
-var sampleAlbums = [];
-sampleAlbums.push({
-             artistName: 'Ladyhawke',
-             name: 'Ladyhawke',
-             releaseDate: '2008, November 18',
-             genres: [ 'new wave', 'indie rock', 'synth pop' ]
-           });
-sampleAlbums.push({
-             artistName: 'The Knife',
-             name: 'Silent Shout',
-             releaseDate: '2006, February 17',
-             genres: [ 'synth pop', 'electronica', 'experimental' ]
-           });
-sampleAlbums.push({
-             artistName: 'Juno Reactor',
-             name: 'Shango',
-             releaseDate: '2000, October 9',
-             genres: [ 'electronic', 'goa trance', 'tribal house' ]
-           });
-sampleAlbums.push({
-             artistName: 'Philip Wesley',
-             name: 'Dark Night of the Soul',
-             releaseDate: '2008, September 12',
-             genres: [ 'piano' ]
-           });
-/////////////end HARD CODED SEED DATA///////////////////
 
 /**********
  * ROUTES *
@@ -63,8 +37,11 @@ app.get('/api', controllers.api.index);
 
 app.get('/api/albums', function(req, res){
   console.log("GET '/api/albums' TRIGGERED");
-  console.log('--res:',sampleAlbums);
-  res.json(sampleAlbums);
+  db.Album.find(function (err, album){
+    if (err){console.log('--error: ', err);}
+    console.log('--res:',album);
+    res.json(album);
+  });
 });
 
 /**********
