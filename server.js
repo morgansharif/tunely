@@ -39,28 +39,14 @@ app.get('/', function homepage (req, res) {
  * JSON API Endpoints
  */
 
+//look at api
 app.get('/api', controllers.api.index);
 
 //get all albums
-app.get('/api/albums', function(req, res){
-  console.log("GET '/api/albums' TRIGGERED");
-  db.Album.find(function (err, albums){
-    if (err){console.log('--error: ', err);}
-    console.log('--res:',albums);
-    res.json(albums);
-  });
-});
+app.get('/api/albums', controllers.albums.index);
 
-app.post('/api/albums', function(req, res){
-  console.log("POST '/api/albums' TRIGGERED");
-  console.log('--req:', req.body);
-  var newAlbum = new db.Album(req.body);
-  newAlbum.save(function(err, album){
-  if (err) {return console.log("save error: " + err);}
-  console.log('--res:',album);
-  res.json(album);
-  });
-});
+//post new album
+app.post('/api/albums', controllers.albums.create);
 
 /**********
  * SERVER *

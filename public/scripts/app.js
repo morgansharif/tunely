@@ -34,9 +34,13 @@ $(document).ready(function() {
 
   });
 
+  $('#albums').on('click', '.add-song', function(event) {
+      console.log('add-song clicked!');
+      var id= $(this).closest('.album').data('album-id'); // "5665ff1678209c64e51b4e7b"
+      console.log('id: ',id);
+  });
 
 }); //end document ready
-
 function assembleAlbums(json){
   albums = json;
   console.log('recieved: ', albums);
